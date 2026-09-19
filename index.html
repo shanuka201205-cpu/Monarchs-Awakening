@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shadow Monarch's Awakening</title>
+
+<style>
+:root{
+  --bg:#02060d;
+  --panel:rgba(3,14,28,.96);
+  --blue:#00aaff;
+  --blue2:#0066ff;
+  --cyan:#00eaff;
+  --text:#dff7ff;
+  --muted:#7190a8;
+  --danger:#ff3b5c;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  background:
+  radial-gradient(circle at top,#062044,#02060d 50%,#000);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+  min-height:100vh;
+  padding:15px;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+}
+
+.header{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.header h1{
+  color:var(--cyan);
+  font-size:clamp(24px,6vw,46px);
+  letter-spacing:2px;
+  text-shadow:0 0 15px #00aaff;
+}
+
+.header p{
+  color:var(--muted);
+  margin-top:8px;
+  letter-spacing:2px;
+}
+
+.system{
+  background:linear-gradient(145deg,var(--panel),#05162a);
+  border:1px solid rgba(0,170,255,.35);
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:20px;
+  box-shadow:0 0 18px rgba(0,170,255,.2);
+}
+
+.system-title{
+  color:var(--cyan);
+  font-size:13px;
+  letter-spacing:3px;
+  margin-bottom:16px;
+}
+
+.status-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.stat{
+  background:#000c18;
+  border:1px solid rgba(0,170,255,.25);
+  border-radius:9px;
+  padding:12px 5px;
+  text-align:center;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+.stat-value{
+  color:var(--cyan);
+  font-size:20px;
+  font-weight:bold;
+  margin-top:6px;
+  word-break:break-word;
+}
+
+.rank-value{
+  font-size:14px;
+}
+
+.xp-section{
+  margin-top:20px;
+}
+
+.xp-top,
+.progress-label{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  margin-bottom:7px;
+}
+
+.xp-bar,
+.progress-bar{
+  height:13px;
+  background:#01050a;
+  border:1px solid rgba(0,170,255,.3);
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.xp-fill,
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--blue2),var(--cyan));
+  box-shadow:0 0 12px var(--cyan);
+  transition:.3s;
+}
+
+.quest-header{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:15px;
+  font-size:12px;
+}
+
+.quest-count{
+  color:var(--cyan);
+  font-weight:bold;
+}
+
+.quest{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#000a15;
+  border:1px solid rgba(0,170,255,.2);
+  border-radius:9px;
+  padding:12px;
+  margin-bottom:9px;
+}
+
+.quest input{
+  width:20px;
+  height:20px;
+  accent-color:var(--cyan);
+}
+
+.quest-info{
+  flex:1;
+}
+
+.quest-name{
+  font-size:14px;
+  font-weight:bold;
+}
+
+.quest-desc{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px;
+}
+
+.quest-xp{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:bold;
+  white-space:nowrap;
+}
+
+.quest.completed{
+  opacity:.5;
+  border-color:var(--cyan);
+}
+
+.quest.completed .quest-name{
+  text-decoration:line-through;
+}
+
+.day-tabs{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+  margin-bottom:16px;
+}
+
+.day-tab{
+  background:#000c18;
+  border:1px solid rgba(0,170,255,.3);
+  color:var(--muted);
+  border-radius:7px;
+  padding:10px 3px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:11px;
+}
+
+.day-tab.active{
+  background:#064b80;
+  border-color:var(--cyan);
+  color:white;
+  box-shadow:0 0 10px rgba(0,234,255,.4);
+}
+
+.workout-title{
+  color:var(--cyan);
+  font-size:20px;
+  margin-bottom:6px;
+}
+
+.workout-subtitle{
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:15px;
+}
+
+.exercise{
+  background:#000a15;
+  border:1px solid rgba(0,170,255,.2);
+  border-radius:9px;
+  padding:13px;
+  margin-bottom:10px;
+}
+
+.exercise-name{
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.set-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:7px;
+}
+
+.set-label{
+  width:42px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.reps{
+  flex:1;
+  min-width:0;
+  background:#01060c;
+  color:white;
+  border:1px solid rgba(0,170,255,.3);
+  border-radius:6px;
+  padding:9px;
+}
+
+.set-check{
+  width:20px;
+  height:20px;
+  accent-color:var(--cyan);
+}
+
+/* CALISTHENICS SKILLS */
+
+.skill{
+  background:#000a15;
+  border:1px solid rgba(0,170,255,.2);
+  border-radius:9px;
+  padding:14px;
+  margin-bottom:10px;
+}
+
+.skill-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.skill-name{
+  font-size:14px;
+  font-weight:bold;
+}
+
+.skill-level{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:bold;
+  white-space:nowrap;
+}
+
+.skill-info{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-top:10px;
+}
+
+.skill-input{
+  flex:1;
+  min-width:0;
+  background:#01060c;
+  color:white;
+  border:1px solid rgba(0,170,255,.3);
+  border-radius:6px;
+  padding:9px;
+}
+
+.skill-hold{
+  color:var(--muted);
+  font-size:11px;
+  white-space:nowrap;
+}
+
+.skill-bar{
+  height:8px;
+  background:#01050a;
+  border:1px solid rgba(0,170,255,.25);
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:10px;
+}
+
+.skill-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--blue2),var(--cyan));
+  box-shadow:0 0 10px var(--cyan);
+  transition:.3s;
+}
+
+.skill-max{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:5px;
+  text-align:right;
+}
+
+.progress-section{
+  margin-top:18px;
+}
+
+.calendar{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+}
+
+.month-title{
+  color:var(--cyan);
+  font-size:14px;
+  letter-spacing:2px;
+  margin:15px 0 8px;
+}
+
+.cal-day{
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(0,170,255,.15);
+  border-radius:6px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.cal-day.completed{
+  color:var(--cyan);
+  border-color:var(--cyan);
+  box-shadow:0 0 8px rgba(0,234,255,.2);
+}
+
+.cal-day.today{
+  color:white;
+  border:1px solid white;
+}
+
+.reset{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid rgba(255,59,92,.5);
+  color:var(--danger);
+  background:transparent;
+  cursor:pointer;
+}
+
+@media(max-width:650px){
+
+  body{
+    padding:10px;
+  }
+
+  .system{
+    padding:14px;
+  }
+
+  .status-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .quest-name{
+    font-size:13px;
+  }
+
+  .quest-desc{
+    font-size:11px;
+  }
+
+  .quest-xp{
+    font-size:10px;
+  }
+
+  .skill-name{
+    font-size:13px;
+  }
+
+  .skill-info{
+    align-items:stretch;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<h1>SHADOW MONARCH'S AWAKENING</h1>
+<p>SYSTEM INTERFACE • DAILY PROGRESSION</p>
+</div>
+
+<!-- STATUS -->
+
+<div class="system">
+
+<div class="system-title">[ STATUS WINDOW ]</div>
+
+<div class="status-grid">
+
+<div class="stat">
+<div class="stat-label">RANK</div>
+<div class="stat-value rank-value" id="rank">E</div>
+</div>
+
+<div class="stat">
+<div class="stat-label">TOTAL XP</div>
+<div class="stat-value" id="totalXP">0</div>
+</div>
+
+<div class="stat">
+<div class="stat-label">DAILY QUESTS</div>
+<div class="stat-value" id="questProgress">0/10</div>
+</div>
+
+<div class="stat">
+<div class="stat-label">STREAK</div>
+<div class="stat-value" id="streak">0</div>
+</div>
+
+</div>
+
+<div class="xp-section">
+
+<div class="xp-top">
+<span id="rankProgressText">E → D</span>
+<span id="rankXP">0 / 1000 XP</span>
+</div>
+
+<div class="xp-bar">
+<div class="xp-fill" id="xpFill"></div>
+</div>
+
+</div>
+
+</div>
+
+<!-- DAILY QUESTS -->
+
+<div class="system">
+
+<div class="system-title">[ DAILY QUESTS ]</div>
+
+<div class="quest-header">
+<span>COMPLETE YOUR DAILY MISSIONS</span>
+<span class="quest-count" id="questHeaderCount">0/10</span>
+</div>
+
+<div class="quest" data-quest="morning">
+<input type="checkbox" onchange="questChanged()">
+<div class="quest-info">
+<div class="quest-name">🌅 Morning Hygiene</div>
+<div class="quest-desc">Brush your teeth</div>
+</div>
+<div class="quest-xp" id="xp-morning"></div>
+</div>
+
+<div class="quest" data-quest="water">
+<input type="checkbox" onchange="questChanged()">
+<div class="quest-info">
+<div class="quest-name">💧 Hydration Protocol</div>
+<div class="quest-desc">Stay properly hydrated throughout the day</div>
+</div>
+<div class="quest-xp" id="xp-water"></div>
+</div>
+
+<div class="quest" data-quest="food">
+<input type="checkbox" onchange="questChanged()">
+<div class="quest-info">
+<div class="quest-name">🍽️ Fuel the Monarch</div>
+<div class="quest-desc">Eat regular, balanced meals and snacks</div>
+</div>
+<div class="quest-xp" id="xp-food"></div>
+</div>
+
+<div class="quest" data-quest="study">
+<input type="checkbox" onchange="questChanged()">
+<div class="quest-info">
+<div class="quest-name">📚 Knowledge Quest</div>
+<div class="quest-desc">Complete your planned school/study work</div>
+</div>
+<div class="quest-xp" id="xp-study"></div>
+</div>
+
+<div class="quest" data-quest="training">
+<input type="checkbox" onchange="questChanged()">
+<div class="quest-info">
+<div class="quest-name">🏋️ Training Quest</div>
+<div class="quest-desc">Complete today's planned workout</div>
+</div>
+<div class="quest-xp" id="xp-training"></div>
+</div>
+
+<div class="quest" data-quest="social">
+<input type="checkbox" onchange="questChanged()">
+<div class="quest-info">
+<div class="quest-name">🗣️ Social Quest</div>
+<div class="quest-desc">Have a proper conversation with someone</div>
+</div>
+<div class="quest-xp" id="xp-social"></div>
+</div>
+
+<div class="quest" data-quest="selfcare">
+<input type="checkbox" onchange="questChanged()">
+<div class="quest-info">
+<div class="quest-name">🧼 Self-Care Protocol</div>
+<div class="quest-desc">Complete your normal shower/personal-care routine</div>
+</div>
+<div class="quest-xp" id="xp-selfcare"></div>
+</div>
+
+<div class="quest" data-quest="mind">
+<input type="checkbox" onchange="questChanged()">
+<div class="quest-info">
+<div class="quest-name">🧘 Mind Reset</div>
+<div class="quest-desc">20 minutes without screens or distractions</div>
+</div>
+<div class="quest-xp" id="xp-mind"></div>
+</div>
+
+<div class="quest" data-quest="sleep">
+<input type="checkbox" onchange="questChanged()">
+<div class="quest-info">
+<div class="quest-name">😴 Recovery Protocol</div>
+<div class="quest-desc">Get enough sleep and allow your body to recover</div>
+</div>
+<div class="quest-xp" id="xp-sleep"></div>
+</div>
+
+<div class="quest" data-quest="night">
+<input type="checkbox" onchange="questChanged()">
+<div class="quest-info">
+<div class="quest-name">🪥 Night Hygiene</div>
+<div class="quest-desc">Brush your teeth before bed</div>
+</div>
+<div class="quest-xp" id="xp-night"></div>
+</div>
+
+</div>
+
+<!-- TRAINING -->
+
+<div class="system">
+
+<div class="system-title">[ TRAINING SYSTEM ]</div>
+
+<div class="day-tabs">
+<button class="day-tab active" onclick="selectDay('mon',this)">MON</button>
+<button class="day-tab" onclick="selectDay('tue',this)">TUE</button>
+<button class="day-tab" onclick="selectDay('wed',this)">WED</button>
+<button class="day-tab" onclick="selectDay('thu',this)">THU</button>
+<button class="day-tab" onclick="selectDay('fri',this)">FRI</button>
+<button class="day-tab" onclick="selectDay('sat',this)">SAT</button>
+<button class="day-tab" onclick="selectDay('sun',this)">SUN</button>
+</div>
+
+<div id="workoutContainer"></div>
+
+</div>
+
+<!-- CALISTHENICS SKILLS -->
+
+<div class="system">
+
+<div class="system-title">[ CALISTHENICS SKILL TREE ]</div>
+
+<div class="workout-subtitle">
+No XP • Every 5 seconds = +1 skill level • Level 7 = MAX
+</div>
+
+<div id="skillsContainer"></div>
+
+</div>
+
+<!-- CALENDAR -->
+
+<div class="system">
+
+<div class="system-title">[ PROGRESSION CALENDAR ]</div>
+
+<div id="calendar"></div>
+
+</div>
+
+<button class="reset" onclick="resetSystem()">
+RESET SYSTEM DATA
+</button>
+
+</div>
+
+<script>
+
+/* WORKOUTS */
+
+const workouts={
+
+mon:{
+name:"MONDAY — PUSH",
+exercises:[
+["Deficit Push-Ups",8,15],
+["Decline Push-Ups",8,15],
+["Wide-Hand Incline Deficit Push-Ups",10,15],
+["Pike Push-Ups",8,15],
+["Lateral Raises",12,20],
+["Bag Skull Crushers",10,15],
+["Bodyweight Triceps Extensions",8,15]
+]},
+
+tue:{
+name:"TUESDAY — PULL",
+exercises:[
+["Narrow Pull-Ups",6,12],
+["Wide Pull-Ups",6,12],
+["Reverse Flys",12,20],
+["Spider Curls",10,15],
+["Incline DB Curls",10,15],
+["Cross-Body Hammer Curls",10,15],
+["Reverse Curls",10,15]
+]},
+
+wed:{
+name:"WEDNESDAY — LOWER + ABS",
+exercises:[
+["Sissy Squats",8,15],
+["Jump Squats",8,15],
+["Calf Raises",15,25],
+["Hanging Raises",8,15],
+["Crucifix Crunches",10,20],
+["Side Plank Raises",10,15]
+]},
+
+thu:{
+name:"THURSDAY — REST",
+exercises:[]
+},
+
+fri:{
+name:"FRIDAY — UPPER",
+exercises:[
+["Deficit Push-Ups",8,15],
+["Narrow Pull-Ups",6,12],
+["Wide Pull-Ups",6,12],
+["Pike Push-Ups",8,15],
+["Lateral Raises",12,20],
+["Reverse Flys",12,20],
+["Spider Curls",10,15],
+["Bag Skull Crushers",10,15]
+]},
+
+sat:{
+name:"SATURDAY — LOWER + ABS",
+exercises:[
+["Sissy Squats",8,15],
+["Jump Squats",8,15],
+["Calf Raises",15,25],
+["Hanging Raises",8,15],
+["Crucifix Crunches",10,20],
+["Side Plank Raises",10,15]
+]},
+
+sun:{
+name:"SUNDAY — REST",
+exercises:[]
+}
+
+};
+
+/* CALISTHENICS SKILLS */
+
+const skills=[
+
+"Tuck L-Sit",
+"One-Leg L-Sit",
+"L-Sit",
+"Advanced L-Sit",
+"V-Sit",
+"Tuck Handstand",
+"Wall Handstand",
+"Freestanding Handstand",
+"Handstand Push-Up",
+"Tuck Front Lever",
+"Advanced Tuck Front Lever",
+"Straddle Front Lever",
+"Front Lever",
+"Back Lever",
+"Muscle-Up",
+"Human Flag",
+"Straddle Planche",
+"Full Planche",
+"One-Arm Handstand"
+
+];
+
+const questIDs=[
+"morning","water","food","study","training",
+"social","selfcare","mind","sleep","night"
+];
+
+/* RANKS */
+
+const ranks=[
+{name:"E",next:"D",required:1000,multiplier:1},
+{name:"D",next:"C",required:2500,multiplier:2.5},
+{name:"C",next:"B",required:7500,multiplier:7.5},
+{name:"B",next:"A",required:15000,multiplier:15},
+{name:"A",next:"S",required:25000,multiplier:25},
+{name:"S",next:"National Level",required:50000,multiplier:50},
+{name:"National Level",next:"Ruler's Vessel",required:80000,multiplier:80},
+{name:"Ruler's Vessel",next:"Monarch's Vessel",required:110000,multiplier:110},
+{name:"Monarch's Vessel",next:"Absolute Being",required:200000,multiplier:200},
+{name:"Absolute Being",next:null,required:0,multiplier:0}
+];
+
+/* BASE XP */
+
+const baseXP={
+morning:5,
+water:7,
+food:12,
+study:9,
+training:23,
+social:7,
+selfcare:7,
+mind:9,
+sleep:12,
+night:5
+};
+
+/* STORAGE */
+
+function readStorage(key){
+
+try{
+return JSON.parse(localStorage.getItem(key))||{};
+}catch(error){
+localStorage.removeItem(key);
+return {};
+}
+
+}
+
+let workoutData=readStorage("shadowWorkoutData");
+let questData=readStorage("shadowQuestData");
+let skillData=readStorage("shadowSkillData");
+
+let totalXP=0;
+let currentDay="mon";
+
+/* DATE */
+
+function getDateKey(date=new Date()){
+
+return date.getFullYear()+"-"+
+String(date.getMonth()+1).padStart(2,"0")+"-"+
+String(date.getDate()).padStart(2,"0");
+
+}
+
+/* RANK */
+
+function getRankFromXP(xp){
+
+let remaining=xp;
+
+for(let i=0;i<ranks.length;i++){
+
+if(ranks[i].name==="Absolute Being"){
+return {index:i,rank:ranks[i],progress:0};
+}
+
+if(remaining<ranks[i].required){
+return {
+index:i,
+rank:ranks[i],
+progress:remaining
+};
+}
+
+remaining-=ranks[i].required;
+
+}
+
+return {
+index:ranks.length-1,
+rank:ranks[ranks.length-1],
+progress:0
+};
+
+}
+
+function getQuestXP(id){
+
+const info=getRankFromXP(totalXP);
+
+if(info.rank.name==="Absolute Being")return 0;
+
+return Math.round(baseXP[id]*info.rank.multiplier);
+
+}
+
+/* QUEST STORAGE */
+
+function getTodayQuestData(){
+
+const today=getDateKey();
+
+if(!questData[today]){
+questData[today]={};
+
+questIDs.forEach(id=>{
+questData[today][id]=false;
+});
+
+}
+
+return questData[today];
+
+}
+
+/* XP CALCULATION */
+
+function recalculateTotalXP(){
+
+let xp=0;
+
+const dates=Object.keys(questData).sort();
+
+for(const date of dates){
+
+const data=questData[date];
+
+for(const id of questIDs){
+
+if(data[id]){
+
+const info=getRankFromXP(xp);
+
+if(info.rank.name!=="Absolute Being"){
+xp+=Math.round(
+baseXP[id]*info.rank.multiplier
+);
+}
+
+}
+
+}
+
+}
+
+totalXP=xp;
+
+localStorage.setItem("shadowTotalXP",String(totalXP));
+
+}
+
+/* QUEST DISPLAY */
+
+function updateQuestXPDisplay(){
+
+questIDs.forEach(id=>{
+
+const element=document.getElementById("xp-"+id);
+
+if(element){
+element.textContent="+"+getQuestXP(id)+" XP";
+}
+
+});
+
+}
+
+function loadQuests(){
+
+const data=getTodayQuestData();
+
+document.querySelectorAll(".quest").forEach(quest=>{
+
+const id=quest.dataset.quest;
+const checkbox=quest.querySelector("input");
+
+checkbox.checked=!!data[id];
+
+quest.classList.toggle("completed",checkbox.checked);
+
+});
+
+updateQuestXPDisplay();
+updateQuestVisuals();
+
+}
+
+function questChanged(){
+
+const today=getDateKey();
+const data=getTodayQuestData();
+
+document.querySelectorAll(".quest").forEach(quest=>{
+
+const id=quest.dataset.quest;
+const checkbox=quest.querySelector("input");
+
+data[id]=checkbox.checked;
+
+quest.classList.toggle("completed",checkbox.checked);
+
+});
+
+questData[today]=data;
+
+localStorage.setItem(
+"shadowQuestData",
+JSON.stringify(questData)
+);
+
+recalculateTotalXP();
+loadQuests();
+updateLevel();
+updateStreak();
+buildCalendar();
+
+}
+
+function updateQuestVisuals(){
+
+const data=getTodayQuestData();
+
+let completed=0;
+
+questIDs.forEach(id=>{
+if(data[id])completed++;
+});
+
+document.getElementById("questProgress").textContent=
+completed+"/10";
+
+document.getElementById("questHeaderCount").textContent=
+completed+"/10";
+
+}
+
+/* STATUS */
+
+function updateLevel(){
+
+const info=getRankFromXP(totalXP);
+const rank=info.rank;
+
+document.getElementById("rank").textContent=rank.name;
+document.getElementById("totalXP").textContent=
+totalXP.toLocaleString();
+
+if(rank.name==="Absolute Being"){
+
+document.getElementById("rankProgressText").textContent=
+"FINAL RANK ACHIEVED";
+
+document.getElementById("rankXP").textContent="ABSOLUTE";
+document.getElementById("xpFill").style.width="100%";
+
+return;
+
+}
+
+document.getElementById("rankProgressText").textContent=
+rank.name+" → "+rank.next;
+
+document.getElementById("rankXP").textContent=
+info.progress.toLocaleString()+" / "+
+rank.required.toLocaleString()+" XP";
+
+document.getElementById("xpFill").style.width=
+Math.min(100,(info.progress/rank.required)*100)+"%";
+
+}
+
+/* WORKOUT */
+
+function selectDay(day,button){
+
+currentDay=day;
+
+document.querySelectorAll(".day-tab").forEach(tab=>{
+tab.classList.remove("active");
+});
+
+button.classList.add("active");
+
+renderWorkout();
+
+}
+
+function renderWorkout(){
+
+const workout=workouts[currentDay];
+const container=document.getElementById("workoutContainer");
+
+if(!workout){
+container.innerHTML="<p>Workout unavailable.</p>";
+return;
+}
+
+let html=`
+<div class="workout-title">${workout.name}</div>
+<div class="workout-subtitle">
+Every exercise = 2 sets
+</div>
+`;
+
+if(workout.exercises.length===0){
+
+container.innerHTML=html+
+"<p class='workout-subtitle'>Recovery day. Let the Monarch recover.</p>";
+
+return;
+
+}
+
+workout.exercises.forEach((exercise,index)=>{
+
+const name=exercise[0];
+const min=exercise[1];
+const max=exercise[2];
+
+html+=`
+
+<div class="exercise">
+
+<div class="exercise-name">${name}</div>
+
+<div class="set-row">
+
+<div class="set-label">SET 1</div>
+
+<input
+class="reps"
+type="number"
+min="0"
+placeholder="${min}-${max}"
+data-exercise="${index}"
+data-set="0">
+
+<input
+class="set-check"
+type="checkbox"
+data-exercise="${index}"
+data-set="0">
+
+</div>
+
+<div class="set-row">
+
+<div class="set-label">SET 2</div>
+
+<input
+class="reps"
+type="number"
+min="0"
+placeholder="${min}-${max}"
+data-exercise="${index}"
+data-set="1">
+
+<input
+class="set-check"
+type="checkbox"
+data-exercise="${index}"
+data-set="1">
+
+</div>
+
+</div>
+`;
+
+});
+
+html+=`
+
+<div class="progress-section">
+
+<div class="progress-label">
+<span>WORKOUT PROGRESS</span>
+<span id="workoutProgressText">0%</span>
+</div>
+
+<div class="progress-bar">
+<div class="progress-fill" id="workoutProgressFill"></div>
+</div>
+
+</div>
+`;
+
+container.innerHTML=html;
+
+loadWorkoutData();
+
+container.querySelectorAll(".reps,.set-check").forEach(input=>{
+
+input.addEventListener("input",saveWorkout);
+input.addEventListener("change",saveWorkout);
+
+});
+
+updateWorkoutProgress();
+
+}
+
+/* SAVE WORKOUT */
+
+function saveWorkout(){
+
+const today=getDateKey();
+
+if(!workoutData[today]){
+workoutData[today]={};
+}
+
+if(!workoutData[today][currentDay]){
+workoutData[today][currentDay]={};
+}
+
+document.querySelectorAll(
+"#workoutContainer .reps,#workoutContainer .set-check"
+).forEach(input=>{
+
+const exercise=input.dataset.exercise;
+const set=input.dataset.set;
+
+if(!workoutData[today][currentDay][exercise]){
+workoutData[today][currentDay][exercise]={};
+}
+
+if(input.classList.contains("reps")){
+
+workoutData[today][currentDay][exercise]["reps"+set]=
+input.value;
+
+}else{
+
+workoutData[today][currentDay][exercise]["check"+set]=
+input.checked;
+
+}
+
+});
+
+localStorage.setItem(
+"shadowWorkoutData",
+JSON.stringify(workoutData)
+);
+
+updateWorkoutProgress();
+
+}
+
+/* LOAD WORKOUT */
+
+function loadWorkoutData(){
+
+const today=getDateKey();
+
+const data=workoutData[today]?.[currentDay]||{};
+
+document.querySelectorAll(
+"#workoutContainer .reps,#workoutContainer .set-check"
+).forEach(input=>{
+
+const exercise=input.dataset.exercise;
+const set=input.dataset.set;
+
+const exerciseData=data[exercise]||{};
+
+if(input.classList.contains("reps")){
+
+input.value=exerciseData["reps"+set]||"";
+
+}else{
+
+input.checked=!!exerciseData["check"+set];
+
+}
+
+});
+
+}
+
+/* WORKOUT PROGRESS */
+
+function updateWorkoutProgress(){
+
+const workout=workouts[currentDay];
+
+if(!workout.exercises.length)return;
+
+const total=workout.exercises.length*2;
+let completed=0;
+
+document.querySelectorAll(
+"#workoutContainer .set-check"
+).forEach(check=>{
+
+if(check.checked)completed++;
+
+});
+
+const percent=Math.round((completed/total)*100);
+
+const fill=document.getElementById("workoutProgressFill");
+const text=document.getElementById("workoutProgressText");
+
+if(fill)fill.style.width=percent+"%";
+if(text)text.textContent=percent+"%";
+
+if(percent===100){
+
+const data=getTodayQuestData();
+
+if(!data.training){
+
+data.training=true;
+questData[getDateKey()]=data;
+
+localStorage.setItem(
+"shadowQuestData",
+JSON.stringify(questData)
+);
+
+recalculateTotalXP();
+loadQuests();
+updateLevel();
+updateStreak();
+buildCalendar();
+
+}
+
+}
+
+}
+
+/* CALISTHENICS SKILLS */
+
+function getSkillLevel(seconds){
+
+if(seconds<5)return 1;
+
+return Math.min(7,Math.floor(seconds/5)+1);
+
+}
+
+function getSkillProgress(seconds){
+
+return Math.min(100,(seconds/30)*100);
+
+}
+
+function renderSkills(){
+
+const container=document.getElementById("skillsContainer");
+
+container.innerHTML="";
+
+skills.forEach((name,index)=>{
+
+const saved=Number(skillData[index])||0;
+const level=getSkillLevel(saved);
+const progress=getSkillProgress(saved);
+
+const skill=document.createElement("div");
+
+skill.className="skill";
+
+skill.innerHTML=`
+
+<div class="skill-top">
+
+<div class="skill-name">
+${index+1}. ${name}
+</div>
+
+<div class="skill-level">
+LEVEL ${level}${level===7?" — MAX":""}
+</div>
+
+</div>
+
+<div class="skill-info">
+
+<input
+class="skill-input"
+type="number"
+min="0"
+step="1"
+placeholder="Best hold in seconds"
+value="${saved||""}"
+data-skill="${index}">
+
+<div class="skill-hold">
+${saved} sec
+</div>
+
+</div>
+
+<div class="skill-bar">
+<div
+class="skill-fill"
+style="width:${progress}%">
+</div>
+</div>
+
+<div class="skill-max">
+${saved >= 30 ? "MAXIMUM HOLD REACHED" : saved + " / 30 seconds"}
+</div>
+
+`;
+
+container.appendChild(skill);
+
+});
+
+container.querySelectorAll(".skill-input").forEach(input=>{
+
+input.addEventListener("input",saveSkill);
+
+});
+
+}
+
+function saveSkill(event){
+
+const input=event.target;
+const index=input.dataset.skill;
+
+let seconds=Number(input.value)||0;
+
+if(seconds<0)seconds=0;
+
+skillData[index]=seconds;
+
+localStorage.setItem(
+"shadowSkillData",
+JSON.stringify(skillData)
+);
+
+renderSkills();
+
+}
+
+/* STREAK */
+
+function updateStreak(){
+
+let streak=0;
+const today=new Date();
+
+for(let i=0;i<365;i++){
+
+const date=new Date(today);
+date.setDate(today.getDate()-i);
+
+const data=questData[getDateKey(date)];
+
+if(!data)break;
+
+if(Object.values(data).some(value=>value===true)){
+streak++;
+}else{
+break;
+}
+
+}
+
+document.getElementById("streak").textContent=streak;
+
+}
+
+/* CALENDAR */
+
+function buildCalendar(){
+
+const calendar=document.getElementById("calendar");
+
+calendar.innerHTML="";
+
+const start=new Date(2026,8,19);
+const end=new Date(2026,11,31);
+
+let current=new Date(2026,8,1);
+
+while(current<=end){
+
+const monthTitle=document.createElement("div");
+
+monthTitle.className="month-title";
+
+monthTitle.textContent=current.toLocaleString("default",{
+month:"long",
+year:"numeric"
+}).toUpperCase();
+
+calendar.appendChild(monthTitle);
+
+const grid=document.createElement("div");
+grid.className="calendar";
+
+const year=current.getFullYear();
+const month=current.getMonth();
+
+const days=new Date(year,month+1,0).getDate();
+
+for(let day=1;day<=days;day++){
+
+const date=new Date(year,month,day);
+
+if(date<start||date>end)continue;
+
+const key=getDateKey(date);
+const cell=document.createElement("div");
+
+cell.className="cal-day";
+cell.textContent=day;
+
+if(key===getDateKey()){
+cell.classList.add("today");
+}
+
+const data=questData[key];
+
+if(data&&Object.values(data).some(value=>value===true)){
+cell.classList.add("completed");
+}
+
+grid.appendChild(cell);
+
+}
+
+calendar.appendChild(grid);
+
+current=new Date(year,month+1,1);
+
+}
+
+}
+
+/* RESET */
+
+function resetSystem(){
+
+if(!confirm("RESET ALL SHADOW MONARCH SYSTEM DATA?"))return;
+
+localStorage.removeItem("shadowWorkoutData");
+localStorage.removeItem("shadowQuestData");
+localStorage.removeItem("shadowTotalXP");
+localStorage.removeItem("shadowSkillData");
+
+workoutData={};
+questData={};
+skillData={};
+totalXP=0;
+
+renderWorkout();
+loadQuests();
+renderSkills();
+updateLevel();
+updateStreak();
+buildCalendar();
+
+}
+
+/* INITIALIZE */
+
+recalculateTotalXP();
+renderWorkout();
+loadQuests();
+renderSkills();
+updateLevel();
+updateStreak();
+buildCalendar();
+
+</script>
+
+</body>
+</html>
